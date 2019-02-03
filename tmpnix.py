@@ -32,5 +32,3 @@ except subprocess.CalledProcessError:
     sys.exit(3)
 
 # TODO - get path and dependencies, tar it up, show command line to copy
-# wait for user input to exit
-# TODO - figure out if copying from stopped container is possible?
