@@ -12,6 +12,7 @@ RUN tar xf nix-2.2.1.tar.xz
 RUN cd nix-2.2.1 && ./configure --prefix=/usr/local --with-store-dir=${buildprefix}/nix/store --localstatedir=${buildprefix}/nix/var && make && make install
 RUN adduser tmpnix
 USER tmpnix
+RUN echo "${buildprefix}" > /home/tmpnix/.buildprefix
 RUN mkdir /home/tmpnix/.config
 RUN /usr/local/bin/nix-store --init
 ENV NIX_CONF_DIR /home/tmpnix/.config
