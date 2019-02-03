@@ -57,6 +57,8 @@ docker volume create tmpnix
 
 # Now you can build any Nix package like this
 docker run -it --mount source=tmpnix,destination=/tmp/nix tmpnix build <package_name>
+# e.g.
+docker run -it --mount source=tmpnix,destination=/tmp/nix tmpnix build nixpkgs.strace
 
 # The container will continue running and tell you how to copy the
 # tar-ball containing the build result and all of its run-time
