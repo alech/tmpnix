@@ -8,18 +8,17 @@ def usage():
     print("Usage: build packagename")
     sys.exit(1)
 
-if len(sys.argv) != 2:
+if len(sys.argv) != 3:
     usage()
 
-command = sys.argv[0]
-package = sys.argv[1]
+command = sys.argv[1]
+package = sys.argv[2]
 
 if command != "build":
     usage()
 
-try:
-    subprocess.run(["nix-env", "-iA", "--dry-run", package])
-except subprocess.CalledProcessError:
+res = subprocess.run(["nix-env", "-iA", "--dry-run", package])
+if res.returncode != 0:
     print("Installer dry run failed, are you sure the package name is correct?");
     print("Try searching for packages with nix-env -qaP '.*name.*'")
     sys.exit(2)
