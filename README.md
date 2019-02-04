@@ -65,8 +65,10 @@ docker run -it --mount source=tmpnix,destination=/tmp/nix tmpnix build nixpkgs.s
 # After finishing to build, the script will tell you how to copy the
 # tar-ball containing the build result and all of its run-time
 # dependencies from the container.
+# Once you copied the container, use tar xjf <tarball> -C / to unpack with
+# / as a destination
 
-# If you want to search for packages, you can use the standard
-# Nix commands, e.g.
-docker run tmpnix nix-env -qaP '.*socat.*'
+# If you want to search for packages, you can use the search
+# commands, e.g.
+docker run tmpnix search '.*socat.*'
 ```
