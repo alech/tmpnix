@@ -2,6 +2,7 @@
 
 import sys
 import subprocess
+import os
 
 def usage():
     print("Usage: build packagename")
@@ -31,4 +32,27 @@ except subprocess.CalledProcessError:
     print("nix-channel --update inside the container")
     sys.exit(3)
 
-# TODO - get path and dependencies, tar it up, show command line to copy
+# get the name for the tarball
+
+res = subprocess.run(["nix-env", "--query", "-a", "-A", package], stdout=subprocess.PIPE)
+name = res.stdout.decode("ascii").strip()
+
+res = subprocess.run(["nix-env", "--query", "-a", "--no-name", "--out-path", "-A", package], stdout=subprocess.PIPE)
+outpath = res.stdout.decode("ascii").strip()
+
+res = subprocess.run(["nix-store", "--query", "--requisites", outpath], stdout=subprocess.PIPE)
+dirs_to_tar = res.stdout.decode("ascii").strip().split("\n")
+
+hostname = open('/etc/hostname', 'r').read().strip()
+buildprefix = open('/home/tmpnix/.buildprefix').read().strip()
+
+package_path = os.path.join(buildprefix, "tmpnix-packages")
+if not os.path.isdir(package_path):
+    os.mkdir(package_path)
+
+tar_name = package_path + "/tmpnix-" + name + ".tar.bz2"
+subprocess.run(["tar", "cjf", tar_name] + dirs_to_tar)
+
+print("We are done. \o/")
+print("Pick up your tarball here:")
+print("docker cp " + hostname + ":" + tar_name + " .")

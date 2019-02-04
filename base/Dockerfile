@@ -1,9 +1,9 @@
-FROM ubuntu:18.10                                                             
+FROM ubuntu:18.10
 MAINTAINER tmpnix@alech.de
 
 ARG buildprefix=/tmp
 RUN apt-get update
-RUN apt-get install -y pkg-config build-essential libbz2-dev libsqlite3-dev libcurl4-openssl-dev liblzma-dev brotli libseccomp-dev libboost-dev libssl-dev libboost-context-dev wget xz-utils libbrotli-dev
+RUN apt-get install -y pkg-config build-essential libbz2-dev libsqlite3-dev libcurl4-openssl-dev liblzma-dev brotli libseccomp-dev libboost-dev libssl-dev libboost-context-dev wget xz-utils libbrotli-dev python3
 RUN wget https://github.com/troglobit/editline/releases/download/1.16.0/editline-1.16.0.tar.xz
 RUN tar xf editline-1.16.0.tar.xz
 RUN cd editline-1.16.0 && ./configure --prefix=/usr && make && make install
@@ -22,4 +22,5 @@ RUN /usr/local/bin/nix-channel --add https://nixos.org/channels/nixos-18.09 nixp
 RUN /usr/local/bin/nix-channel --add https://nixos.org/channels/nixpkgs-unstable unstable
 RUN /usr/local/bin/nix-channel --update nixpkgs
 RUN /usr/local/bin/nix-channel --update unstable
-CMD ["/bin/sh"]
+COPY tmpnix.py /home/tmpnix
+ENTRYPOINT ["/home/tmpnix/tmpnix.py"]
