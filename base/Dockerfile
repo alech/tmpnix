@@ -11,6 +11,8 @@ RUN wget https://nixos.org/releases/nix/nix-2.2.1/nix-2.2.1.tar.xz
 RUN tar xf nix-2.2.1.tar.xz
 RUN cd nix-2.2.1 && ./configure --prefix=/usr/local --with-store-dir=${buildprefix}/nix/store --localstatedir=${buildprefix}/nix/var && make && make install
 RUN adduser tmpnix
+RUN mkdir -p ${buildprefix}/nix
+RUN chown tmpnix ${buildprefix}/nix
 USER tmpnix
 RUN echo "${buildprefix}" > /home/tmpnix/.buildprefix
 RUN mkdir /home/tmpnix/.config
